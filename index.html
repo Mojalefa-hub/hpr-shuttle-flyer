@@ -2,7 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=900, initial-scale=1.0">
+<meta name="viewport" content="width=900, initial-scale=0.4, minimum-scale=0.2, maximum-scale=5.0, user-scalable=yes">
+<script>
+  // Dynamically set the viewport scale so the full 900px flyer fits on screen
+  (function () {
+    var targetWidth = 900;
+    var scale = window.screen.width / targetWidth;
+    // Clamp between 0.2 and 1.0
+    scale = Math.min(1.0, Math.max(0.2, scale));
+    var meta = document.querySelector('meta[name="viewport"]');
+    meta.setAttribute('content',
+      'width=900, initial-scale=' + scale.toFixed(3) +
+      ', minimum-scale=0.2, maximum-scale=5.0, user-scalable=yes'
+    );
+  })();
+</script>
 <title>Hector Peterson Shuttle Service</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
