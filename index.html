@@ -359,23 +359,13 @@
     color: var(--cream);
     letter-spacing: 0.3px;
   }
-  .stop-coords {
-    font-size: 0.78rem;
+  .stops-heading-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 1px;
     color: var(--muted);
-    margin-top: 3px;
-    letter-spacing: 0.5px;
-    font-family: monospace;
-  }
-  a.stop-coords {
-    display: inline-block;
-    color: #90B8E8;
-    text-decoration: none;
-    border-bottom: 1px dashed rgba(144,184,232,0.5);
-    transition: color 0.2s, border-color 0.2s;
-  }
-  a.stop-coords:hover {
-    color: #C0D8FF;
-    border-bottom-color: rgba(192,216,255,0.8);
+    opacity: 0.75;
   }
   .stop-dir-badge {
     font-family: 'Bebas Neue', sans-serif;
@@ -384,9 +374,15 @@
     padding: 0.25rem 0.75rem;
     border-radius: 2px;
     background: rgba(130,130,210,0.2);
-    color: #B0B0F0;
+    color: #90B8E8;
     border: 1px solid rgba(130,130,210,0.4);
     white-space: nowrap;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .stop-dir-badge:hover {
+    background: rgba(130,130,210,0.35);
+    color: #C0D8FF;
   }
 
   /* ── Footer ── */
@@ -520,43 +516,39 @@
 
   <!-- Route Stops -->
   <div class="stops-section">
-    <div class="stops-heading">Route Stops</div>
+    <div class="stops-heading">Route Stops <span class="stops-heading-sub">(Both directions)</span></div>
     <div class="stops-grid">
 
       <div class="stop-card">
         <div class="stop-number">1</div>
         <div class="stop-info">
           <div class="stop-name">Life Science Building</div>
-          <a class="stop-coords" href="https://maps.app.goo.gl/qNWFidwgHRFKT7o88" target="_blank">33° 55′ 54.8″ S &nbsp;·&nbsp; 18° 37′ 29.7″ E ↗</a>
         </div>
-        <div class="stop-dir-badge">↑↓ Both directions</div>
+        <a class="stop-dir-badge" href="https://maps.app.goo.gl/qNWFidwgHRFKT7o88" target="_blank">View location ↗</a>
       </div>
 
       <div class="stop-card">
         <div class="stop-number">2</div>
         <div class="stop-info">
           <div class="stop-name">Library</div>
-          <a class="stop-coords" href="https://maps.app.goo.gl/ZUchseafE5HxUt3F6" target="_blank">33° 56′ 02.5″ S &nbsp;·&nbsp; 18° 37′ 37.3″ E ↗</a>
         </div>
-        <div class="stop-dir-badge">↑↓ Both directions</div>
+        <a class="stop-dir-badge" href="https://maps.app.goo.gl/ZUchseafE5HxUt3F6" target="_blank">View location ↗</a>
       </div>
 
       <div class="stop-card">
         <div class="stop-number">3</div>
         <div class="stop-info">
           <div class="stop-name">Student Centre</div>
-          <a class="stop-coords" href="https://www.google.com/maps?q=-33.934139,18.628917" target="_blank">33° 56′ 02.9″ S &nbsp;·&nbsp; 18° 37′ 44.1″ E ↗</a>
         </div>
-        <div class="stop-dir-badge">↑↓ Both directions</div>
+        <a class="stop-dir-badge" href="https://www.google.com/maps?q=-33.934139,18.628917" target="_blank">View location ↗</a>
       </div>
 
       <div class="stop-card">
         <div class="stop-number">4</div>
         <div class="stop-info">
           <div class="stop-name">Shuttle Stop</div>
-          <a class="stop-coords" href="https://www.google.com/maps?q=-33.930389,18.630917" target="_blank">33° 55′ 49.4″ S &nbsp;·&nbsp; 18° 37′ 51.3″ E ↗</a>
         </div>
-        <div class="stop-dir-badge">↑↓ Both directions</div>
+        <a class="stop-dir-badge" href="https://www.google.com/maps?q=-33.930389,18.630917" target="_blank">View location ↗</a>
       </div>
 
       <!-- Future stops will be added here -->
