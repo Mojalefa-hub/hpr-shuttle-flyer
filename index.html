@@ -18,6 +18,8 @@
 </script>
 <title>Hector Peterson Shuttle Service</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <!-- Privacy-friendly analytics by Plausible -->
 <script async src="https://plausible.io/js/pa-PaN9SbxNU1SXPEWX4bEN4.js"></script>
 <script>
@@ -424,6 +426,57 @@
     color: var(--gold);
     opacity: 0.4;
   }
+  /* ── Map section ── */
+  .map-section {
+    padding: 1.4rem 2.5rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .map-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(201,168,76,0.35);
+  }
+  .map-heading-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .map-heading-title::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .map-active-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .map-frame-wrap {
+    width: 100%;
+    height: 340px;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.25);
+  }
+  #leaflet-map {
+    width: 100%;
+    height: 100%;
+  }
 </style>
 </head>
 <body>
@@ -522,9 +575,9 @@
       <div class="stop-card">
         <div class="stop-number">1</div>
         <div class="stop-info">
-          <div class="stop-name">Life Science Building</div>
+          <div class="stop-name">Life Sciences Building</div>
         </div>
-        <a class="stop-dir-badge" href="https://maps.app.goo.gl/qNWFidwgHRFKT7o88" target="_blank">View location ↗</a>
+        <a class="stop-dir-badge" onclick="showMap(-33.931873, 18.624907, 'Life Sciences Building')">View location ↗</a>
       </div>
 
       <div class="stop-card">
@@ -532,7 +585,7 @@
         <div class="stop-info">
           <div class="stop-name">Library</div>
         </div>
-        <a class="stop-dir-badge" href="https://maps.app.goo.gl/ZUchseafE5HxUt3F6" target="_blank">View location ↗</a>
+        <a class="stop-dir-badge" onclick="showMap(-33.933958, 18.626944, 'Library')">View location ↗</a>
       </div>
 
       <div class="stop-card">
@@ -540,7 +593,7 @@
         <div class="stop-info">
           <div class="stop-name">Student Centre</div>
         </div>
-        <a class="stop-dir-badge" href="https://www.google.com/maps?q=-33.934139,18.628917" target="_blank">View location ↗</a>
+        <a class="stop-dir-badge" onclick="showMap(-33.934139, 18.628917, 'Student Centre')">View location ↗</a>
       </div>
 
       <div class="stop-card">
@@ -548,7 +601,7 @@
         <div class="stop-info">
           <div class="stop-name">Shuttle Stop</div>
         </div>
-        <a class="stop-dir-badge" href="https://www.google.com/maps?q=-33.930389,18.630917" target="_blank">View location ↗</a>
+        <a class="stop-dir-badge" onclick="showMap(-33.930389, 18.630917, 'Shuttle Stop')">View location ↗</a>
       </div>
 
       <!-- Future stops will be added here -->
@@ -569,6 +622,78 @@
     <div class="feb-tag">FEB 2026</div>
   </div>
 
+  <div class="divider"></div>
+
+  <!-- Map card -->
+  <div class="map-section">
+    <div class="map-heading">
+      <span class="map-heading-title">Location Map</span>
+      <span class="map-active-label" id="map-active-label">UWC Campus</span>
+    </div>
+    <div class="map-frame-wrap">
+      <div id="leaflet-map"></div>
+    </div>
+  </div>
+
 </div>
+
+<script>
+  // Initialise Leaflet map centred on UWC campus
+  var map = L.map('leaflet-map', { zoomControl: true }).setView([-33.9325, 18.627], 16);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  // Numbered pin drop icon factory
+  function pinIcon(number) {
+    var svg = [
+      '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42">',
+        '<path d="M16 0 C7.163 0 0 7.163 0 16 C0 28 16 42 16 42 C16 42 32 28 32 16 C32 7.163 24.837 0 16 0 Z" fill="#C9A84C"/>',
+        '<circle cx="16" cy="16" r="10" fill="#0D1117"/>',
+        '<text x="16" y="21" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="13" fill="#C9A84C" letter-spacing="0">' + number + '</text>',
+      '</svg>'
+    ].join('');
+    return L.divIcon({
+      className: '',
+      html: svg,
+      iconSize: [32, 42],
+      iconAnchor: [16, 42],
+      popupAnchor: [0, -44]
+    });
+  }
+
+  // Plot all stops as numbered pin drops
+  var stops = [
+    { lat: -33.931873, lng: 18.624907, name: 'Life Sciences Building' },
+    { lat: -33.933958, lng: 18.626944, name: 'Library' },
+    { lat: -33.934139, lng: 18.628917, name: 'Student Centre' },
+    { lat: -33.930389, lng: 18.630917, name: 'Shuttle Stop' }
+  ];
+
+  stops.forEach(function(stop, i) {
+    L.marker([stop.lat, stop.lng], { icon: pinIcon(i + 1) })
+      .addTo(map)
+      .bindPopup('<strong style="font-family:DM Sans,sans-serif;font-size:0.9rem;">Stop ' + (i + 1) + ' · ' + stop.name + '</strong>');
+  });
+
+  // showMap — called by each View location badge
+  function showMap(lat, lng, label) {
+    map.flyTo([lat, lng], 18, { animate: true, duration: 0.8 });
+    document.getElementById('map-active-label').textContent = label;
+    document.getElementById('map-active-label').style.color = '#C9A84C';
+    document.querySelector('.map-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Open popup for the matching marker
+    map.eachLayer(function(layer) {
+      if (layer instanceof L.Marker) {
+        var pos = layer.getLatLng();
+        if (Math.abs(pos.lat - lat) < 0.0001 && Math.abs(pos.lng - lng) < 0.0001) {
+          layer.openPopup();
+        }
+      }
+    });
+  }
+</script>
 </body>
 </html>
